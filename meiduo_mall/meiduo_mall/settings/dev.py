@@ -11,10 +11,22 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # print(BASE_DIR)
+
+# sys.path ===> 这一个就是‘导包路径’，是一个列表
+# 获取apps这一个包的绝对路径
+apps_path = os.path.join(BASE_DIR, 'apps')
+# 把绝对路径天剑到‘导包路径’里面去,这是一个列表
+sys.path.insert(0, apps_path)
+
+# # 查看导包路径
+# for item in sys.path:
+#     print(item)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -37,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
