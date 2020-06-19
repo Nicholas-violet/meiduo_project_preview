@@ -39,6 +39,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['api.meiduo.site',
                  '127.0.0.1',
+                 '0.0.0.0',
                  'localhost',
                  'www.meiduo.site']
 
@@ -54,6 +55,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # apps，user注册
     'users',
+    # apps，verifications注册
+    # 'verifications',
     # 添加 django-cors-headers 使其可以进行 cors 跨域
     'corsheaders',
 ]
@@ -62,7 +65,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -214,6 +217,7 @@ LOGGING = {
 # CORS跨域请求白名单设置
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
+    'http://0.0.0.0:8080',
     'http://localhost:8080',
     'http://www.meiduo.site:8080',
 )
