@@ -166,6 +166,13 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    "verify_code": {  # 验证码信息: 存到 2 号库
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 # 修改 session 存储机制使用 Redis 保存。
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
