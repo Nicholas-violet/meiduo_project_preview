@@ -5,7 +5,11 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'meiduo_mall.settings')
+    # 原来的位置，通过工程直接找到settings.py 文件
+    # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'meiduo_mall.settings')
+    # 原来的位置，通过工程找到setting目录下面的dev.py 文件
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'meiduo_mall.settings.dev')
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
