@@ -7,6 +7,7 @@ urlpatterns = [
     # 函数视图路由语法：
     # path('网络地址正则表达式', 函数视图名),
     re_path(r'^image_codes/(?P<uuid>[\w-]+)/$', views.ImageCodeView.as_view()),
+    re_path(r'^sms_codes/(?P<mobile>1[3-9]\d{9})/$', views.SMSCodeView.as_view()),
 
 
 ]

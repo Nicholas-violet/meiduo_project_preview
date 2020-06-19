@@ -5,20 +5,20 @@ sys.path.insert(0, '../../../')
 
 import ssl
 
-from meiduo_mall.libs.yuntongxun.CCPRestSDK import REST
+from libs.yuntongxun.CCPRestSDK import REST
 
 ssl._create_default_https_context = ssl._create_unverified_context  # 全局取消证书验证
 
 
 
 # 说明：主账号，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID
-_accountSid = '8aaf0708686ef7650168709c38240138'
+_accountSid = '8aaf07087249953401724ab4539e017a'
 
 # 说明：主账号Token，登陆云通讯网站后，可在控制台-应用中看到开发者主账号AUTH TOKEN
-_accountToken = '0e14294d3ec74c80af42fbc28f19e10d'
+_accountToken = 'a4a18aeb601743c395906a7bdf9719fb'
 
 # 请使用管理控制台首页的APPID或自己创建应用的APPID
-_appId = '8aaf0708686ef7650168709c387d013e'
+_appId = '8aaf07087249953401724ab454a30181'
 
 # 说明：请求地址，生产环境配置成app.cloopen.com
 _serverIP = 'sandboxapp.cloopen.com'
