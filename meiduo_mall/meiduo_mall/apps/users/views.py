@@ -117,3 +117,53 @@ class RegisterView(View):
         # 13.拼接json返回
         return http.JsonResponse({'code': 0,
                                  'errmsg': 'ok'})
+
+
+
+import json
+from django.contrib.auth import login, authenticate
+
+class LoginView(View):
+
+    def post(self, request):
+        '''实现登录接口'''
+        # 1.接收参数
+        dict = json.loads(request.body.decode())
+        username = dict.get('username')
+        password = dict.get('password')
+        remembered = dict.get('remembered')
+
+
+        # 2.校验(整体 + 单个)
+        if not all([username, password]):
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '缺少必传参数'})
+
+        # 3.验证是否能够登录
+        user = authenticate(username=username,
+                            password=password)
+
+        # 判断是否为空,如果为空,返回
+        if user is None:
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '用户名或者密码错误'})
+
+        # 4.状态保持
+        login(request, user)
+
+        # 5.判断是否记住用户
+        if remembered != True:
+            # 7.如果没有记住: 关闭立刻失效
+            request.session.set_expiry(0)
+        else:
+            # 6.如果记住:  设置为两周有效
+            request.session.set_expiry(None)
+
+        # 8.返回json
+        return http.JsonResponse({'code': 0,
+                             'errmsg': 'ok'})
+
+
+
+
+
