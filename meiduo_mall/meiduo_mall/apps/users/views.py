@@ -42,7 +42,7 @@ import re
 # from django import http
 from django_redis import get_redis_connection
 # 导入:
-from django.contrib.auth import login
+# from django.contrib.auth import login
 
 # 用户注册接口设计
 class RegisterView(View):
@@ -130,8 +130,10 @@ class RegisterView(View):
 
 
 import json
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
 
+
+# 登录
 class LoginView(View):
 
     def post(self, request):
@@ -182,3 +184,22 @@ class LoginView(View):
         return response
 
 
+# 退出登录
+class LogoutView(View):
+    """定义退出登录的接口"""
+
+    def delete(self, request):
+        """实现退出登录逻辑"""
+
+        # 清理 session
+        logout(request)
+
+        # 创建 response 对象.
+        response = http.JsonResponse({'code':0,
+                                 'errmsg':'ok'})
+
+        # 调用对象的 delete_cookie 方法, 清除cookie
+        response.delete_cookie('username')
+
+        # 返回响应
+        return response
