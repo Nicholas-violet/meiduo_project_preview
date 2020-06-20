@@ -115,8 +115,17 @@ class RegisterView(View):
         login(request, user)
 
         # 13.拼接json返回
-        return http.JsonResponse({'code': 0,
+        response =  http.JsonResponse({'code': 0,
                                  'errmsg': 'ok'})
+
+        # 在响应对象中设置用户名信息.
+        # 将用户名写入到 cookie，有效期 14 天
+        response.set_cookie('username',
+                            user.username,
+                            max_age=3600 * 24 * 14)
+
+        # 返回响应结果
+        return response
 
 
 
@@ -160,10 +169,16 @@ class LoginView(View):
             request.session.set_expiry(None)
 
         # 8.返回json
-        return http.JsonResponse({'code': 0,
+        response = http.JsonResponse({'code': 0,
                              'errmsg': 'ok'})
 
+        # 在响应对象中设置用户名信息.
+        # 将用户名写入到 cookie，有效期 14 天
+        response.set_cookie('username',
+                            user.username,
+                            max_age=3600 * 24 * 14)
 
-
+        # 返回响应结果
+        return response
 
 
