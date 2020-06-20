@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django import http
 from django.views import View
 from users.models import User
+from utils.views import LoginRequiredMixin
 
 
 # 用户名重复注册
@@ -203,3 +204,14 @@ class LogoutView(View):
 
         # 返回响应
         return response
+
+
+
+# 给该类视图增加 Mixin 扩展类
+class UserInfoView(LoginRequiredMixin, View):
+    """用户中心"""
+    def get(self, request):
+        print('用户中心函数')
+        return http.JsonResponse({'code':0,
+                             'errmsg':'ok'})
+
