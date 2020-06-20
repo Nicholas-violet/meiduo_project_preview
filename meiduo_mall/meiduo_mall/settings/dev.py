@@ -230,6 +230,7 @@ CORS_ORIGIN_WHITELIST = (
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
-
+# 指定自定义的用户认证后端:
+AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileAuthBackend']
 
 
