@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'verifications',
     # 添加 django-cors-headers 使其可以进行 cors 跨域
     'corsheaders',
+    # QQ 子应用
+    'oauth',
 ]
 
 MIDDLEWARE = [
