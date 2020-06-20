@@ -38,7 +38,8 @@ import logging
 logger = logging.getLogger('django')
 import random
 from django import http
-from libs.yuntongxun.ccp_sms import CCP
+# from libs.yuntongxun.ccp_sms import CCP
+from celery_tasks.sms.tasks import ccp_send_sms_code
 
 class SMSCodeView(View):
     """短信验证码"""
@@ -110,7 +111,10 @@ class SMSCodeView(View):
 
         # 9. 发送短信验证码
         # 短信模板,电话，验证码，有效时间，验证码1号模板，
-        CCP().send_template_sms(mobile, [sms_code, 5], 1)
+        # 原本的写法
+        # CCP().send_template_sms(mobile, [sms_code, 5], 1)
+        # 现在的写法，注意，这里的函数，调用的时候需要加入.delay()
+        ccp_send_sms_code.delay(mobile, sms_code)
 
         # 10. 响应结果
         return http.JsonResponse({'code': 0, 'errmsg': '发送短信成功'})
