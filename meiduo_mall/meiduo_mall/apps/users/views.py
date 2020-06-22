@@ -60,7 +60,7 @@ class RegisterView(View):
         sms_code_client = dict.get('sms_code')
 
         # 2.校验(整体)
-        if not all([username, password, password2, mobile, allow, sms_code_client]):
+        if not all([username, password, password2, mobile, sms_code_client]):
             return http.JsonResponse({'code':400,
                                       'errmsg':'缺少必传参数'})
 
@@ -212,6 +212,9 @@ class UserInfoView(LoginRequiredMixin, View):
     """用户中心"""
     def get(self, request):
         print('用户中心函数')
-        return http.JsonResponse({'code':0,
-                             'errmsg':'ok'})
+        return http.JsonResponse({
+            'code':0,
+            'errmsg':'ok',
+            'info_data':{}
+        })
 

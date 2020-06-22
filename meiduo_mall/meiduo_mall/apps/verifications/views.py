@@ -92,6 +92,7 @@ class SMSCodeView(View):
         # 7. 生成短信验证码：生成6位数验证码
         sms_code = '%06d' % random.randint(0, 999999)
         logger.info(sms_code)
+        # print(sms_code)
 
         # 创建管道对象:
         pl = redis_conn.pipeline()
