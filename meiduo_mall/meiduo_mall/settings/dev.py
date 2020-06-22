@@ -22,10 +22,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 apps_path = os.path.join(BASE_DIR, 'apps')
 # 把绝对路径天剑到‘导包路径’里面去,这是一个列表
 sys.path.insert(0, apps_path)
+# sys.path.insert(0, BASE_DIR)
+# print(BASE_DIR)
+print(os.path.dirname(BASE_DIR))
+# sys.path.insert(0, apps_path)
+# for i in sys.path:
+#     print(i)
 
-# # 查看导包路径
-# for item in sys.path:
-#     print(item)
+
+# 查看导包路径
+for item in sys.path:
+    print(item)
 
 
 # Quick-start development settings - unsuitable for production

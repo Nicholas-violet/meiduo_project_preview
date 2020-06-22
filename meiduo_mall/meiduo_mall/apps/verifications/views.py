@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse
 from django_redis import get_redis_connection
-from libs.captcha.captcha import captcha
+from meiduo_mall.libs.captcha.captcha import captcha
 
 
 # 图形验证码

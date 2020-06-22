@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django import http
 from django.views import View
 from users.models import User
-from utils.views import LoginRequiredMixin
+from meiduo_mall.utils.views import LoginRequiredMixin
+# from utils.views import LoginRequiredMixin
 
 
 # 用户名重复注册
