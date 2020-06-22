@@ -13,4 +13,5 @@ urlpatterns = [
     re_path(r'^logout/$', views.LogoutView.as_view()),
     # 用户中心的子路由
     re_path(r'^info/$', views.UserInfoView.as_view()),
+    re_path(r'^emails/$', views.EmailView.as_view()),
 ]

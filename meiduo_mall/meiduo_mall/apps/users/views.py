@@ -227,3 +227,39 @@ class UserInfoView(LoginRequiredMixin, View):
         return http.JsonResponse({'code':0,
                              'errmsg':'ok',
                              'info_data':info_data})
+
+
+
+import logging
+logger = logging.getLogger('django')
+
+class EmailView(View):
+    """添加邮箱"""
+
+    def put(self, request):
+        """实现添加邮箱逻辑"""
+        # 接收参数
+        json_dict = json.loads(request.body.decode())
+        email = json_dict.get('email')
+
+        # 校验参数
+        if not email:
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '缺少email参数'})
+        if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '参数email有误123456'})
+
+
+        # 赋值 email 字段
+        try:
+            request.user.email = email
+            request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '添加邮箱失败'})
+
+        # 响应添加邮箱结果
+        return http.JsonResponse({'code': 0,
+                             'errmsg': 'ok'})
