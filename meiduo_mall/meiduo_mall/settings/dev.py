@@ -22,17 +22,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 apps_path = os.path.join(BASE_DIR, 'apps')
 # 把绝对路径天剑到‘导包路径’里面去,这是一个列表
 sys.path.insert(0, apps_path)
-# sys.path.insert(0, BASE_DIR)
+sys.path.insert(0, BASE_DIR)
 # print(BASE_DIR)
-print(os.path.dirname(BASE_DIR))
+# print(os.path.dirname(BASE_DIR))
 # sys.path.insert(0, apps_path)
 # for i in sys.path:
 #     print(i)
 
 
-# 查看导包路径
-for item in sys.path:
-    print(item)
+# # 查看导包路径
+# for item in sys.path:
+#     print(item)
 
 
 # Quick-start development settings - unsuitable for production
@@ -243,3 +243,10 @@ CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileAuthBackend']
 
 
+# QQ登录参数
+# 我们申请的 客户端id
+QQ_CLIENT_ID = '101474184'
+# 我们申请的 客户端秘钥
+QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'
+# 我们申请时添加的: 登录成功后回调的路径
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'
