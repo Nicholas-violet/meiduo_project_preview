@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     # 函数视图路由语法：
     # path('网络地址正则表达式', 函数视图名),
-    path('qq/authorization/', views.QQFirstView.as_view())
+    path('qq/authorization/', views.QQFirstView.as_view()),
+    path('oauth_callback/', views.QQUserView.as_view()),
 
 ]
