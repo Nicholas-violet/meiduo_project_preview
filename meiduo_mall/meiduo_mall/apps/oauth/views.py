@@ -120,6 +120,7 @@ class QQUserView(View):
             # 如果没有, 直接返回:
             return http.JsonResponse({'code': 400,
                                  'errmsg': '验证码失效'})
+
         # 如果有, 则进行判断:
         if sms_code_client != sms_code_server.decode():
             # 如果不匹配, 则直接返回:
@@ -132,6 +133,7 @@ class QQUserView(View):
         if not openid:
             return http.JsonResponse({'code': 400,
                                  'errmsg': '缺少openid'})
+
         # 4.保存注册数据
         try:
             user = User.objects.get(mobile=mobile)
@@ -145,26 +147,25 @@ class QQUserView(View):
             if not user.check_password(password):
                 return http.JsonResponse({'code': 400,
                                      'errmsg': '输入的密码不正确'})
+
         # 5.将用户绑定 openid
         try:
-            OAuthQQUser.objects.create(openid=openid,
-                                       user=user)
+            OAuthQQUser.objects.create(openid=openid, user=user)
         except Exception as e:
-            return http.JsonResponse({'code': 400,
-                                 'errmsg': '往数据库添加数据出错'})
+            return http.JsonResponse({'code': 400, 'errmsg': '往数据库添加数据出错'})
+
         # 6.实现状态保持
         login(request, user)
 
         # 7.创建响应对象:
-        response = http.JsonResponse({'code': 0,
-                                 'errmsg': 'ok'})
+        response = http.JsonResponse({'code': 0, 'errmsg': 'ok'})
 
         # 8.登录时用户名写入到 cookie，有效期14天
         response.set_cookie('username',
                             user.username,
                             max_age=3600 * 24 * 14)
 
-        # 9.响应
+        # 9.响应++
         return response
 
 
