@@ -40,7 +40,7 @@ from oauth.models import OAuthQQUser
 import logging
 logger = logging.getLogger('django')
 from django.contrib.auth import login
-# from oauth.utils import generate_access_token
+from oauth.utils import generate_access_token
 
 class QQUserView(View):
     """用户扫码登录的回调处理"""
