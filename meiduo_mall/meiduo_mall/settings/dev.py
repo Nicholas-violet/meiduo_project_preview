@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'corsheaders',
     # QQ 子应用
     'oauth',
+    # 收货地址
+    'areas',
 ]
 
 MIDDLEWARE = [
