@@ -259,10 +259,18 @@ class EmailView(View):
             logger.error(e)
             return http.JsonResponse({'code': 400,
                                  'errmsg': '添加邮箱失败'})
+        # 变换 email 的格式: 从 '123456@qq.com' 变为: '<123456@qq.com>'
+        email = '<' + email + '>'
+        # 从 celery_tasks 中导入:
+        from celery_tasks.email.tasks import send_verify_email
+        # 调用发送的函数:
+        # 用定义好的函数替换原来的字符串:
+        verify_url = request.user.generate_verify_email_url()
+        # 发送验证链接:
+        send_verify_email.delay(email, verify_url)
 
-        # 响应添加邮箱结果
         return http.JsonResponse({'code': 0,
-                             'errmsg': 'ok'})
+                             'errmsg': '添加邮箱成功'})
 
 
 

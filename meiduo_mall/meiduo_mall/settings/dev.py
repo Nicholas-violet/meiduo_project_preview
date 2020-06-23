@@ -267,3 +267,17 @@ EMAIL_HOST_USER = 'itcast_weiwei@163.com'
 EMAIL_HOST_PASSWORD = 'OQSKSEISPZVTHEMK'
 # 收件人看到的发件人
 EMAIL_FROM = 'meiduo_mall<itcast_sz_python37@163.com>'
+
+
+# 邮箱验证链接
+EMAIL_VERIFY_URL = 'http://www.meiduo.site:8080/success_verify_email.html?token='
+
+
+
+
+
+
+
+
+
+

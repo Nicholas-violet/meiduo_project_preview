@@ -1,6 +1,9 @@
 # 从你刚刚下载的包中导入 Celery 类
 from celery import Celery
 
+import os
+if not os.getenv('DJANGO_SETTINGS_MODULE'):
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'meiduo_mall.settings.dev'
 
 # 利用导入的 Celery 创建对象。这里的 'meiduo' 字符串可以使用别的字符串替换.
 celery_app = Celery('meiduo')
@@ -11,4 +14,4 @@ celery_app.config_from_object('celery_tasks.config')
 
 # 让 celery_app 自动捕获目标地址下的任务:
 # 就是自动捕获 tasks
-celery_app.autodiscover_tasks(['celery_tasks.sms'])
+celery_app.autodiscover_tasks(['celery_tasks.sms', 'celery_tasks.email'])
