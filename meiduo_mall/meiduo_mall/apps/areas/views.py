@@ -45,30 +45,37 @@ class SubAreasView(View):
         3.响应市或区数据
         4.补充缓存数据
         """
+        # 判断是否有缓存
+        sub_data = cache.get('sub_area_' + pk)
 
-        try:
-             # 1.查询市或区数据
-            sub_model_list = Area.objects.filter(parent=pk)
-             #  查询省份数据
-            parent_model = Area.objects.get(id=pk)
+        if not sub_data:
 
-            # 2.整理市或区数据
-            sub_list = []
-            for sub_model in sub_model_list:
-                sub_list.append({'id': sub_model.id,
-                                 'name': sub_model.name})
+            # 1.查询市或区数据
+            try:
+                sub_model_list = Area.objects.filter(parent=pk)
+                # 查询市或区的父级
+                parent_model = Area.objects.get(id=pk)
 
-            sub_data = {
-                'id': parent_model.id,  # pk
-                'name': parent_model.name,
-                'subs': sub_list
-            }
 
-        except Exception as e:
-            return hhtp.JsonResponse({'code': 400,
-                                 'errmsg': '城市或区县数据错误'})
+                # 2.序列化市或区数据
+                sub_list = []
+                for sub_model in sub_model_list:
+                    sub_list.append({'id': sub_model.id,
+                                     'name': sub_model.name})
 
-        # 3.响应市或区数据 ok: 0
+                sub_data = {
+                    'id':parent_model.id, # pk
+                    'name':parent_model.name,
+                    'subs': sub_list
+                }
+
+                # 缓存市或区数据
+                cache.set('sub_area_' + pk, sub_data, 3600)
+            except Exception as e:
+                return http.JsonResponse({'code': 400,
+                                     'errmsg': '城市或区县数据错误'})
+
+        # 3.响应市或区数据
         return http.JsonResponse({'code': 0,
                              'errmsg': 'OK',
                              'sub_data': sub_data})
