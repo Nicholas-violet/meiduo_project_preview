@@ -273,4 +273,34 @@ class EmailView(View):
                              'errmsg': '添加邮箱成功'})
 
 
+class VerifyEmailView(View):
+    """验证邮箱"""
 
+    def put(self, request):
+        """实现邮箱验证逻辑"""
+        # 接收参数
+        token = request.GET.get('token')
+
+        # 校验参数：判断 token 是否为空和过期，提取 user
+        if not token:
+            return  http.JsonResponse({'code':400,
+                                  'errmsg':'缺少token'})
+
+        # 调用上面封装好的方法, 将 token 传入
+        user = User.check_verify_email_token(token)
+        if not user:
+            return  http.JsonResponse({'code':400,
+                                  'errmsg':'无效的token'})
+
+        # 修改 email_active 的值为 True
+        try:
+            user.email_active = True
+            user.save()
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code':400,
+                                 'errmsg':'激活邮件失败'})
+
+        # 返回邮箱验证结果
+        return http.JsonResponse({'code':0,
+                             'errmsg':'ok'})
