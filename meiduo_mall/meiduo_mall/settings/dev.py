@@ -70,8 +70,10 @@ INSTALLED_APPS = [
     'oauth',
     # 收货地址
     'areas',
-    # 商品
+    # 商品列表
     'contents',
+    # 商品
+    'goods'
 ]
 
 MIDDLEWARE = [
