@@ -591,5 +591,53 @@ class UpdateTitleAddressView(View):
 
 
 
+class ChangePasswordView(LoginRequiredMixin, View):
+    """修改密码"""
 
+    def put(self, request):
+        """实现修改密码逻辑"""
+        # 接收参数
+        dict = json.loads(request.body.decode())
+        old_password = dict.get('old_password')
+        new_password = dict.get('new_password')
+        new_password2 = dict.get('new_password2')
+
+        # 校验参数
+        if not all([old_password, new_password, new_password2]):
+           return http.JsonResponse({'code':400,
+                                'errmsg':'缺少必传参数'})
+
+
+        result = request.user.check_password(old_password)
+        if not result:
+            return http.JsonResponse({'code':400,
+                                 'errmsg':'原始密码不正确'})
+
+        if not re.match(r'^[0-9A-Za-z]{8,20}$', new_password):
+            return http.JsonResponse({'code':400,
+                                 'errmsg':'密码最少8位,最长20位'})
+
+        if new_password != new_password2:
+            return http.JsonResponse({'code':400,
+                                 'errmsg':'两次输入密码不一致'})
+
+        # 修改密码
+        try:
+            request.user.set_password(new_password)
+            request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code':400,
+                                 'errmsg':'修改密码失败'})
+
+        # 清理状态保持信息
+        logout(request)
+
+        response = http.JsonResponse({'code':0,
+                                 'errmsg':'ok'})
+
+        response.delete_cookie('username')
+
+        # # 响应密码修改结果：重定向到登录界面
+        return response
 
