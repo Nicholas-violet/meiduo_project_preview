@@ -262,11 +262,11 @@ EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 # 下面的内容是可变的, 随后台设置的不同而改变:
 # 发送邮件的邮箱
-EMAIL_HOST_USER = 'itcast_weiwei@163.com'
+EMAIL_HOST_USER = 'itcast888888@163.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'OQSKSEISPZVTHEMK'
+EMAIL_HOST_PASSWORD = 'PKOERMBXJFOLXPCB'
 # 收件人看到的发件人
-EMAIL_FROM = 'meiduo_mall<itcast_sz_python37@163.com>'
+EMAIL_FROM = '煤55老板<itcast888888@163.com>'
 
 
 # 邮箱验证链接

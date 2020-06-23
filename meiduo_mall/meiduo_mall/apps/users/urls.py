@@ -14,6 +14,6 @@ urlpatterns = [
     # 用户中心的子路由
     re_path(r'^info/$', views.UserInfoView.as_view()),
     re_path(r'^emails/$', views.EmailView.as_view()),
-# 验证邮箱
+    # 验证邮箱
     re_path(r'^emails/verification/$', views.VerifyEmailView.as_view()),
 ]
