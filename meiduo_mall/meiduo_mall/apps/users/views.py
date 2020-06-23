@@ -521,7 +521,23 @@ class UpdateDestroyAddressView(View):
                              'address': address_dict})
 
 
+    def delete(self, request, address_id):
+        """删除地址"""
+        try:
+            # 查询要删除的地址
+            address = Address.objects.get(id=address_id)
 
+            # 将地址逻辑删除设置为True
+            address.is_deleted = True
+            address.save()
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '删除地址失败'})
+
+        # 响应删除地址结果
+        return http.JsonResponse({'code': 0,
+                             'errmsg': '删除地址成功'})
 
 
 
