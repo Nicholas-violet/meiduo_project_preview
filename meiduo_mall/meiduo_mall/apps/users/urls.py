@@ -16,6 +16,9 @@ urlpatterns = [
     re_path(r'^emails/$', views.EmailView.as_view()),
     # 验证邮箱
     re_path(r'^emails/verification/$', views.VerifyEmailView.as_view()),
-# 新增收货地址
+    # 新增收货地址
     re_path(r'^addresses/create/$', views.CreateAddressView.as_view()),
+    # 访问地址的子路由:
+    re_path(r'^addresses/$', views.AddressView.as_view()),
+
 ]
