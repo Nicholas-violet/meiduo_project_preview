@@ -4,7 +4,7 @@ from django.db import models
 # 导入
 from django.contrib.auth.models import AbstractUser
 # 导入:
-from itsdangerous import TimedJSONWebSignatureSerializer
+from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from django.conf import settings
 
 # 我们重写用户模型类, 继承自 AbstractUser
@@ -50,3 +50,37 @@ class User(AbstractUser):
         verify_url = settings.EMAIL_VERIFY_URL + token
         # 返回
         return verify_url
+
+        # 定义验证函数:
+    @staticmethod
+    def check_verify_email_token(token):
+        """
+        验证token并提取user
+        :param token: 用户信息签名后的结果
+        :return: user, None
+        """
+        # 调用 itsdangerous 类,生成对象
+        # 邮件验证链接有效期：一天
+        serializer = TimedJSONWebSignatureSerializer(settings.SECRET_KEY,
+                                                     expires_in=60 * 60 * 24)
+        try:
+            # 解析传入的 token 值, 获取数据 data
+            data = serializer.loads(token)
+        except BadData:
+            # 如果传入的 token 中没有值, 则报错
+            return None
+        else:
+            # 如果有值, 则获取
+            user_id = data.get('user_id')
+            email = data.get('email')
+
+            # 获取到值之后, 尝试从 User 表中获取对应的用户
+        try:
+            user = User.objects.get(id=user_id,
+                                    email=email)
+        except Exception as e:
+            # 如果用户不存在, 则返回 None
+            return None
+        else:
+            # 如果存在则直接返回
+            return user
