@@ -68,9 +68,9 @@ class QQUserView(View):
         oauth = OAuthQQ(
             client_id=settings.QQ_CLIENT_ID,
             client_secret=settings.QQ_CLIENT_SECRET,
-            redirect_uri=settings.QQ_REDIRECT_URI
+            redirect_uri=settings.QQ_REDIRECT_URI,
             # 用户完成整个qq登陆流程之后，返回到美多到哪个页面
-            # state=next  # http://www.meiduo.site:8080/
+            state=next  # http://www.meiduo.site:8080/
         )
 
         try:

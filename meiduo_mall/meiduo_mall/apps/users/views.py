@@ -263,3 +263,6 @@ class EmailView(View):
         # 响应添加邮箱结果
         return http.JsonResponse({'code': 0,
                              'errmsg': 'ok'})
+
+
+
