@@ -76,9 +76,11 @@ class SubAreasView(View):
                                      'errmsg': '城市或区县数据错误'})
 
         # 3.响应市或区数据
-        return http.JsonResponse({'code': 0,
-                             'errmsg': 'OK',
-                             'sub_data': sub_data})
+        return http.JsonResponse({
+            'code': 0,
+            'errmsg': 'OK',
+            'sub_data': sub_data
+        })
 
 
 
