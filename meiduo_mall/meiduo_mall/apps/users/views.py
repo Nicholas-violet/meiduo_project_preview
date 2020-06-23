@@ -248,7 +248,7 @@ class EmailView(View):
                                  'errmsg': '缺少email参数'})
         if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
             return http.JsonResponse({'code': 400,
-                                 'errmsg': '参数email有误123456'})
+                                 'errmsg': '参数email有误'})
 
 
         # 赋值 email 字段
