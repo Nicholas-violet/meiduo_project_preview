@@ -8,5 +8,6 @@ urlpatterns = [
     # path('网络地址正则表达式', 函数视图名),
     # 获取省份信息:
     re_path(r'^areas/$', views.ProvinceAreasView.as_view()),
-    
+    # 市子级地区
+    re_path(r'^areas/(?P<pk>[1-9]\d+)/$', views.SubAreasView.as_view()),
 ]
