@@ -446,6 +446,83 @@ class AddressView(View):
 
 
 
+class UpdateDestroyAddressView(View):
+    """修改和删除地址"""
+
+    def put(self, request, address_id):
+        """修改地址"""
+        # 接收参数
+        json_dict = json.loads(request.body.decode())
+        receiver = json_dict.get('receiver')
+        province_id = json_dict.get('province_id')
+        city_id = json_dict.get('city_id')
+        district_id = json_dict.get('district_id')
+        place = json_dict.get('place')
+        mobile = json_dict.get('mobile')
+        tel = json_dict.get('tel')
+        email = json_dict.get('email')
+
+        # 校验参数
+        if not all([receiver, province_id, city_id, district_id, place, mobile]):
+            return http.JsonResponse({'code': 400,
+                                  'errmsg': '缺少必传参数'})
+
+
+        if not re.match(r'^1[3-9]\d{9}$', mobile):
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '参数mobile有误'})
+
+        if tel:
+            if not re.match(r'^(0[0-9]{2,3}-)?([2-9][0-9]{6,7})+(-[0-9]{1,4})?$', tel):
+                return http.JsonResponse({'code': 400,
+                                     'errmsg': '参数tel有误'})
+        if email:
+            if not re.match(r'^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email):
+                return http.JsonResponse({'code': 400,
+                                     'errmsg': '参数email有误'})
+
+        # 判断地址是否存在,并更新地址信息
+        try:
+            Address.objects.filter(id=address_id).update(
+                user = request.user,
+                title = receiver,
+                receiver = receiver,
+                province_id = province_id,
+                city_id = city_id,
+                district_id = district_id,
+                place = place,
+                mobile = mobile,
+                tel = tel,
+                email = email
+            )
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code': 400,
+                                 'errmsg': '更新地址失败'})
+
+        # 构造响应数据
+        address = Address.objects.get(id=address_id)
+        address_dict = {
+            "id": address.id,
+            "title": address.title,
+            "receiver": address.receiver,
+            "province": address.province.name,
+            "city": address.city.name,
+            "district": address.district.name,
+            "place": address.place,
+            "mobile": address.mobile,
+            "tel": address.tel,
+            "email": address.email
+        }
+
+        # 响应更新地址结果
+        return http.JsonResponse({'code': 0,
+                             'errmsg': '更新地址成功',
+                             'address': address_dict})
+
+
+
+
 
 
 
