@@ -279,7 +279,11 @@ EMAIL_FROM = '煤55老板<itcast888888@163.com>'
 EMAIL_VERIFY_URL = 'http://www.meiduo.site:8080/success_verify_email.html?token='
 
 
-
+# 生成的静态 html 文件保存目录
+# 先获取 BASE_DIR 的绝对路径: 即 内层 meiduo_mall 的绝对路径
+# 然后截取最后一级, 即,获取父类的绝对路径.
+# 再截取一级, 拿到项目文件的绝对路径, 然后拼接上 'front_end_pc'
+GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
 
 
 
