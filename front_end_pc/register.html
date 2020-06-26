@@ -44,7 +44,7 @@
                         <li>
                             <label>手机号:</label>
                             <input @blur="check_phone" v-model="mobile" type="text" name="mobile" id="phone">
-                            <span v-show="error_phone" class="error_tip">请输入正确的手机号码</span>
+                            <span v-show="error_phone" class="error_tip">{{ error_phone_message }}</span>
                         </li>
                         <li>
                             <label>图形验证码:</label>

@@ -37,14 +37,10 @@ var vm = new Vue({
                 withCredentials:true,
             })
                 .then(response => {
-                    if (response.data.code == 1) {
-                        location.href = 'login.html';
-                    } else {
-                        alert(response.data.errmsg)
-                    }
+                    location.href = 'login.html';
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error.response);
                 })
         },
         // 获取url路径参数
@@ -68,11 +64,7 @@ var vm = new Vue({
                     })
                     .then(response => {
                         // 跳转到支付宝支付
-                         if (response.data.code == 1) {
-                            location.href = response.data.alipay_url;
-                        } else {
-                            alert(response.data.errmsg)
-                        }
+                        location.href = response.data.alipay_url;
                     })
                     .catch(error => {
                         console.log(error);

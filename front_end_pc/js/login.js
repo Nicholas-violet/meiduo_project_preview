@@ -97,7 +97,7 @@ var vm = new Vue({
                 // 失败的回调:
                 .catch(error => {
                     // 打印处理
-                    console.log(error);
+                    console.log(error.response.data);
                 })
         }
     }

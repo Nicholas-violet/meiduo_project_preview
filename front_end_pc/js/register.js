@@ -54,21 +54,18 @@ var vm = new Vue({
             }
             // 检查重名
             if (this.error_name == false) {
-                var url = this.host + '/usernames/' + this.username + '/count/';
-                axios.get(url, {
-                    responseType: 'json',
-                    withCredentials:true,
-                })
-                    .then(response => {
-                        if (response.data.count > 0) {
-                            this.error_name_message = '用户名已存在';
+                var url = this.host + "/usernames/"+ this.username  +"/count/";
+                axios.get(url, {})
+                    .then((resposne) => {
+                        if (resposne.data.count == 1) {
                             this.error_name = true;
+                            this.error_name_message = '用户名已存在';
                         } else {
                             this.error_name = false;
                         }
                     })
-                    .catch(error => {
-                        console.log(error.response);
+                    .catch((error) => {
+                        console.log(error)
                     })
             }
         },
@@ -164,23 +161,27 @@ var vm = new Vue({
             })
                 .then(response => {
                     // 表示后端发送短信成功
-                    // 倒计时60秒，60秒后允许用户再次点击发送短信验证码的按钮
-                    var num = 60;
-                    // 设置一个计时器
-                    var t = setInterval(() => {
-                        if (num == 1) {
-                            // 如果计时器到最后, 清除计时器对象
-                            clearInterval(t);
-                            // 将点击获取验证码的按钮展示的文本回复成原始文本
-                            this.sms_code_tip = '获取短信验证码';
-                            // 将点击按钮的onclick事件函数恢复回去
-                            this.sending_flag = false;
-                        } else {
-                            num -= 1;
-                            // 展示倒计时信息
-                            this.sms_code_tip = num + '秒';
-                        }
-                    }, 1000, 60)
+                    if (response.data.code == 0) {
+                        // 倒计时60秒，60秒后允许用户再次点击发送短信验证码的按钮
+                        var num = 60;
+                        // 设置一个计时器
+                        var t = setInterval(() => {
+                            if (num == 1) {
+                                // 如果计时器到最后, 清除计时器对象
+                                clearInterval(t);
+                                // 将点击获取验证码的按钮展示的文本回复成原始文本
+                                this.sms_code_tip = '获取短信验证码';
+                                // 将点击按钮的onclick事件函数恢复回去
+                                this.sending_flag = false;
+                            } else {
+                                num -= 1;
+                                // 展示倒计时信息
+                                this.sms_code_tip = num + '秒';
+                            }
+                        }, 1000, 60)
+                    } else {
+                        alert(response.data.errmsg);
+                    }
                 })
                 .catch(error => {
                     if (error.response.status == 400) {
