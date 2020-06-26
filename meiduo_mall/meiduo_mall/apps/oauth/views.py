@@ -8,6 +8,7 @@ from django import http
 from django.views import View
 
 # QQ第一个接口实现，就是页面扫码接口
+'''
 class QQFirstView(View):
     """提供QQ登录页面网址"""
 
@@ -34,6 +35,33 @@ class QQFirstView(View):
                 'code': 0,
                 'errmsg': 'OK',
                 'login_url':login_url
+        })
+'''
+
+class QQFirstView(View):
+    def get(self, request):
+
+        # next 表示从哪个页面进入到的登录页面
+        # 将来登录成功后，就自动回到那个页面
+        next = request.GET.get('next')
+
+        # 获取 QQ 登录页面网址
+        # 创建 OAuthQQ 类的对象
+        oauth = OAuthQQ(
+            client_id=settings.QQ_CLIENT_ID,
+            client_secret=settings.QQ_CLIENT_SECRET,
+            redirect_uri=settings.QQ_REDIRECT_URI,
+            # 用户完成整个请求登录流程之后，返回到美多到哪一个页面
+            state=next
+        )
+        # 调用对象的获取qq地址的方法
+        login_url = oauth.get_qq_url()
+
+        # 返回登录地址
+        return http.JsonResponse({
+            'code':0,
+            'errmsg':'ok',
+            'login_url':login_url
         })
 
 
@@ -91,11 +119,12 @@ class QQUserView(View):
 
         # 获取openid仅仅代表这用户QQ的身份是没有问题的
         try:
+            # 去获取一哈这一个QQ对否已经已经绑定了用户
             qq_uer = OAuthQQUser.objects.get(openid=openid)
         except Exception as e:
             # 用户没有绑定，返回加密后openid--
             # 前端让用户数据用户名和密码，后续接口再去判断绑定
-            token = generate_access_token(openid)
+            token = generate_access_token(openid)   # 加密一哈
             return http.JsonResponse({
                 'code':400,
                 'errmsg':'未绑定',

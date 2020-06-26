@@ -14,7 +14,6 @@ def my_decorator(func):
 
 
 
-
 class LoginRequiredMixin(object):
     '''自定义的Mixin扩展类'''
 
