@@ -1,8 +1,5 @@
-from django.db import models
-
-# Create your models here.
 from meiduo_mall.utils.BaseModel import BaseModel
-
+from django.db import models
 
 class GoodsCategory(BaseModel):
     """
@@ -261,5 +258,3 @@ class SKUSpecification(BaseModel):
 
     def __str__(self):
         return '%s: %s - %s' % (self.sku, self.spec.name, self.option.value)
-
-

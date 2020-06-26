@@ -120,7 +120,7 @@ DATABASES = {
         'PORT': 3306, # 数据库端口
         'USER': 'root', # 数据库用户名
         'PASSWORD': 'mysql', # 数据库用户密码
-        'NAME': 'meiduo_mall' # 数据库名字
+        'NAME': 'meiduo_mall_priview' # 数据库名字
     },
 }
 
@@ -286,6 +286,11 @@ EMAIL_VERIFY_URL = 'http://www.meiduo.site:8080/success_verify_email.html?token=
 GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
 
 
+# 该配置项，指定django使用的文件存储后端
+DEFAULT_FILE_STORAGE = "meiduo_mall.utils.fastdfs.fastdfs_storage.FastDFSStorage"
+
+# 自定义fdfs文件存储服务器的域名
+FDFS_URL = "http://image.meiduo.site:8888/"
 
 
 
