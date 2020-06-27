@@ -641,3 +641,70 @@ class ChangePasswordView(LoginRequiredMixin, View):
         # # 响应密码修改结果：重定向到登录界面
         return response
 
+
+from goods.models import SKU
+
+class UserBrowseHistory(View):
+
+     # 保存用户浏览记录
+    def post(self, request):
+        '''保存用户浏览记录'''
+         # 接收参数
+        json_dict = json.loads(request.body.decode())
+        sku_id = json_dict.get('sku_id')
+
+         # 校验参数
+        try:
+            SKU.objects.get('sku_id')
+        except Exception as e:
+            return http.JsonResponse({
+                'code':400,
+                'errmsg':'sku 不存在'
+            })
+
+         # 保存用户数据
+        redis_conn = get_redis_connection('history')
+        pl = redis_conn.pipeline()
+        use_id = request.user.id
+
+        # 先去重,就是吧在一个之前浏览的去掉的,然后加到最前面
+        pl.lrem('history_%s'%use_id, 0, sku_id)
+        # 再把最新的存储进去
+        pl.lpush('history_%s'%use_id, sku_id)
+        # 最后截取页面最新的五个展现出来
+        pl.ltrim('history_%s'%use_id, 0, 4)
+        # 执行管道
+        pl.execute()
+
+        return http.JsonResponse({
+            'code':0,
+            'errmsg':'ok'
+        })
+
+    # 查询浏览记录
+    def get(self, request):
+        redis_conn = get_redis_connection('history')
+        sku_ids = redis_conn.lrange('history_%s'%request.user.id, 0, -1)
+
+        # 根据sku_ids列表数据,查询出商品的删库数据
+        skus = []
+        for sku_id in sku_ids:
+            sku = SKU.objects.get(id=sku_id)
+            skus.append({
+                'id':sku.id,
+                'name':sku.name,
+                'default_image_url':sku.default_image_url,
+                'price':sku.price
+            })
+
+        return http.JsonResponse({
+            'code':0,
+            'errmsg':'ok',
+            'skus':skus
+        })
+
+
+
+
+
+
