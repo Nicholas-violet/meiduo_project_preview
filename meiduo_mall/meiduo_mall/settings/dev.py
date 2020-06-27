@@ -311,6 +311,10 @@ CRONJOBS = [
 # 解决 crontab 中文问题
 CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
 
+# 自定义静态文件保存的根目录
+GENERATED_STATIC_HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
+
+
 # 全文检索
 # Haystack
 HAYSTACK_CONNECTIONS = {

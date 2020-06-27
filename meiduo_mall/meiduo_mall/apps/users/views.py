@@ -704,7 +704,3 @@ class UserBrowseHistory(View):
         })
 
 
-
-
-
-
