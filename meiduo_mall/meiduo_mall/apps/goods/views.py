@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from .utils import get_breadcrumb
 from django.core.paginator import Paginator, EmptyPage
 
+
+
 class ListView(View):
 
     def get(self, request, category_id):
@@ -97,3 +99,26 @@ class HotGoodsView(View):
                              'errmsg':'OK',
                              'hot_skus':hot_skus})
 
+
+# 导入:
+from haystack.views import SearchView
+
+class MySearchView(SearchView):
+    '''重写SearchView类'''
+    def create_response(self):
+        page = self.request.GET.get('page')
+        # 获取搜索结果
+        context = self.get_context()
+        data_list = []
+        for sku in context['page'].object_list:
+            data_list.append({
+                'id':sku.object.id,
+                'name':sku.object.name,
+                'price':sku.object.price,
+                'default_image_url':sku.object.default_image_url,
+                'searchkey':context.get('query'),
+                'page_size':context['page'].paginator.num_pages,
+                'count':context['page'].paginator.count
+            })
+        # 拼接参数, 返回
+        return JsonResponse(data_list, safe=False)
