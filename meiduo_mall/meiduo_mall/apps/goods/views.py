@@ -27,7 +27,7 @@ class ListView(View):
             return JsonResponse({'code': 400,
                                  'errmsg': '获取mysql数据出错'})
 
-        # 查询面包屑导航(函数在下面写着)
+        # 查询面包屑导航
         breadcrumb = get_breadcrumb(category)
 
         # 排序方式:
@@ -38,6 +38,7 @@ class ListView(View):
             return JsonResponse({'code': 400,
                                  'errmsg': '获取mysql数据出错'})
 
+        # 用于分页的,paginator是分页器
         paginator = Paginator(skus, page_size)
         # 获取每页商品数据
         try:
@@ -69,4 +70,30 @@ class ListView(View):
             'count':total_page
         })
 
+
+class HotGoodsView(View):
+    """商品热销排行"""
+
+    def get(self, request, category_id):
+        """提供商品热销排行 JSON 数据"""
+        # 根据销量倒序
+        try:
+            skus = SKU.objects.filter(category_id=category_id,
+                                  is_launched=True).order_by('-sales')[:2]
+        except Exception as e:
+            return JsonResponse({'code':400,
+                                 'errmsg':'获取商品出错'})
+        # 转换格式:
+        hot_skus = []
+        for sku in skus:
+            hot_skus.append({
+                'id':sku.id,
+                'default_image_url':sku.default_image_url,
+                'name':sku.name,
+                'price':sku.price
+            })
+
+        return JsonResponse({'code':0,
+                             'errmsg':'OK',
+                             'hot_skus':hot_skus})
 
