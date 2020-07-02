@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 
 from . import views
 
@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     # 函数视图路由语法：
     # path('网络地址正则表达式', 函数视图名),
-
+    # 购物车的添加
+    re_path(r'^carts/$', views.CartsView.as_view()),
 
 ]
