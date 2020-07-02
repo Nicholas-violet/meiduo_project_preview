@@ -6,6 +6,7 @@ from QQLoginTool.QQtool import OAuthQQ
 from django.conf import settings
 from django import http
 from django.views import View
+from meiduo_mall.apps.carts.utils import merge_cart_cookie_to_redis
 
 # QQ第一个接口实现，就是页面扫码接口
 '''
@@ -261,4 +262,5 @@ class QQUserView(View):
         return response
 
 
-
+# 合并购物车
+response = merge_cart_cookie_to_redis(request=request, user=user, response=response)

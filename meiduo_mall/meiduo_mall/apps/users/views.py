@@ -5,6 +5,7 @@ from django import http
 from django.views import View
 from users.models import User
 from meiduo_mall.utils.views import LoginRequiredMixin
+from meiduo_mall.apps.carts.utils import merge_cart_cookie_to_redis
 # from utils.views import LoginRequiredMixin
 
 
@@ -700,3 +701,5 @@ class UserBrowseHistory(View):
                              'skus': skus})
 
 
+# 合并购物车
+response = merge_cart_cookie_to_redis(request=request, user=user, response=response)
