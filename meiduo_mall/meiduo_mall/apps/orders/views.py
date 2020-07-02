@@ -156,42 +156,66 @@ class OrderCommitView(View):
 
             # 遍历购物车中被勾选的商品信息
             for sku_id in sku_ids:
-                # 查询SKU信息
-                sku = SKU.objects.get(id=sku_id)
-                # 判断SKU库存
-                sku_count = carts[sku.id]
-                if sku_count > sku.stock:
-                    # 出错就回滚
-                    transaction.savepoint_rollback(save_id)
-                    return JsonResponse({
-                        'code': 400,
-                        'errmsg': '库存不足'})
+                # 增加的代码: 增加一个死循环
+                while True:
+                    # 查询SKU信息
+                    sku = SKU.objects.get(id=sku_id)
 
-                # SKU减少库存，增加销量
-                sku.stock -= sku_count
-                sku.sales += sku_count
-                sku.save()
+                    # 增加的代码: 读取原始库存
+                    origin_stock = sku.stock
+                    origin_sales = sku.sales
 
-                # 修改SPU销量
-                sku.goods.sales += sku_count
-                sku.goods.save()
+                    # 判断SKU库存
+                    sku_count = carts[sku.id]
+                    if sku_count > sku.stock:
+                        # 事务回滚
+                        transaction.savepoint_rollback(save_id)
+                        return JsonResponse({
+                            'code': 400,
+                            'errmsg': '库存不足'
+                        })
 
-                # 保存订单商品信息 OrderGoods（多）
-                OrderGoods.objects.create(
-                    order=order,
-                    sku=sku,
-                    count=sku_count,
-                    price=sku.price,
-                )
+                    # SKU减少库存，增加销量
+                    # sku.stock -= sku_count
+                    # sku.sales += sku_count
+                    # sku.save()
 
-                # 保存商品订单中总价和总数量
-                order.total_count += sku_count
-                order.total_amount += (sku_count * sku.price)
+                    # 增加的代码: 乐观锁更新库存和销量
+                    # 计算差值
+                    new_stock = origin_stock - sku_count
+                    new_sales = origin_sales + sku_count
+                    result = SKU.objects.filter(
+                        id=sku_id,
+                        stock=origin_stock
+                    ).update(stock=new_stock, sales=new_sales)
+                    # 如果下单失败，但是库存足够时，
+                    # 继续下单，直到下单成功或者库存不足为止
+                    if result == 0:
+                        continue
 
-            # 添加邮费和保存订单信息
-            order.total_amount += order.freight
-            order.save()
+                    # 修改SPU销量
+                    sku.goods.sales += sku_count
+                    sku.goods.save()
 
+                    # 保存订单商品信息 OrderGoods（多）
+                    OrderGoods.objects.create(
+                        order=order,
+                        sku=sku,
+                        count=sku_count,
+                        price=sku.price,
+                    )
+
+                    # 保存商品订单中总价和总数量
+                    order.total_count += sku_count
+                    order.total_amount += (sku_count * sku.price)
+
+                    # 增加的代码:
+                    # 下单成功或者失败就跳出循环
+                    break
+
+                # 添加邮费和保存订单信息
+                order.total_amount += order.freight
+                order.save()
             # 清除保存点
             transaction.savepoint_commit(save_id)
 
@@ -204,5 +228,6 @@ class OrderCommitView(View):
         # 响应提交订单结果
         return JsonResponse({'code': 0,
                              'errmsg': '下单成功',
-                             'order_id': order.order_id})
+                             'order_id': order.order_id
+                             })
 
