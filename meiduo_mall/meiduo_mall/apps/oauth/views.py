@@ -257,10 +257,10 @@ class QQUserView(View):
         response.set_cookie('username',
                             user.username,
                             max_age=3600 * 24 * 14)
+        # 合并购物车
+        response = merge_cart_cookie_to_redis(request=request, user=user, response=response)
 
         # 9.响应++
         return response
 
 
-# 合并购物车
-response = merge_cart_cookie_to_redis(request=request, user=user, response=response)

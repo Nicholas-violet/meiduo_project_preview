@@ -182,6 +182,8 @@ class LoginView(View):
         response.set_cookie('username',
                             user.username,
                             max_age=3600 * 24 * 14)
+        # 合并购物车
+        response = merge_cart_cookie_to_redis(request=request, user=user, response=response)
 
         # 返回响应结果
         return response
@@ -701,5 +703,3 @@ class UserBrowseHistory(View):
                              'skus': skus})
 
 
-# 合并购物车
-response = merge_cart_cookie_to_redis(request=request, user=user, response=response)
