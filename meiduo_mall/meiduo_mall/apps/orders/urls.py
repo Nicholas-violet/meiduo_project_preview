@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     # 函数视图路由语法：
     # path('网络地址正则表达式', 函数视图名),
-
+    # 订单确认
+    re_path(r'^orders/settlement/$', views.OrderSettlementView.as_view()),
 
 ]
