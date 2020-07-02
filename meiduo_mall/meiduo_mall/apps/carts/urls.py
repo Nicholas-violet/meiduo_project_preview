@@ -6,7 +6,9 @@ from . import views
 urlpatterns = [
     # 函数视图路由语法：
     # path('网络地址正则表达式', 函数视图名),
-    # 购物车的添加
+    # 购物车的添加,展示,修改,删除
     re_path(r'^carts/$', views.CartsView.as_view()),
+    # 全选购物车
+    re_path(r'^carts/selection/$', views.CartSelectAllView.as_view()),
 
 ]
