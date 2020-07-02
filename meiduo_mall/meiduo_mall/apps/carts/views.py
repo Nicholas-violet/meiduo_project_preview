@@ -9,6 +9,8 @@ from django_redis import get_redis_connection
 import pickle
 import base64
 
+
+# 添加,展示,修改,删除购物车
 class CartsView(View):
     """ 购物车管理 """
 
@@ -324,7 +326,7 @@ class CartsView(View):
 
 
 
-"""全选购物车"""
+# 全选购物车
 class CartSelectAllView(View):
     """全选购物车"""
 
@@ -381,10 +383,52 @@ class CartSelectAllView(View):
 
 
 
+# 展示商品页面简单购物车
+class CartsSimpleView(View):
+    """商品页面右上角购物车"""
+    def get(self, request):
 
+        # 判断用户是否登录
+        user = request.user
+        if user.is_authenticated:
+            # 用户已登录，查询 Redis 购物车
+            redis_conn = get_redis_connection('carts')
+            item_dict = redis_conn.hgetall('carts_%s' % user.id)
+            cart_selected = redis_conn.smembers('selected_%s' % user.id)
 
+            # 将 redis 中的两个数据统一格式，跟 cookie 中的格式一致，方便统一查询
+            cart_dict = {}
+            for sku_id, count in item_dict.items():
+                cart_dict[int(sku_id)] = {
+                    'count': int(count),
+                    'selected': sku_id in cart_selected
+                }
+        else:
+            # 用户未登录，查询 cookie 购物车
+            cookie_cart = request.COOKIES.get('carts')
+            if cookie_cart:
+                cart_dict = pickle.loads(base64.b64decode(cookie_cart.encode()))
+            else:
+                cart_dict = {}
 
+        # 构造简单购物车 JSON 数据
+        cart_skus = []
+        sku_ids = cart_dict.keys()
+        skus = SKU.objects.filter(id__in=sku_ids)
+        for sku in skus:
+            cart_skus.append({
+                'id': sku.id,
+                'name': sku.name,
+                'count': cart_dict.get(sku.id).get('count'),
+                'default_image_url': sku.default_image_url
+            })
 
+        # 响应 json 列表数据
+        return JsonResponse({
+            'code': 0,
+            'errmsg': 'OK',
+            'cart_skus': cart_skus
+        })
 
 
 
