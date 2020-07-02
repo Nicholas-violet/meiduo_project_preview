@@ -8,5 +8,6 @@ urlpatterns = [
     # path('网络地址正则表达式', 函数视图名),
     # 订单确认
     re_path(r'^orders/settlement/$', views.OrderSettlementView.as_view()),
-
+    # 订单提交
+    re_path(r'^orders/commit/$', views.OrderCommitView.as_view()),
 ]
