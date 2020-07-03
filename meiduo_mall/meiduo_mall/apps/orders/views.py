@@ -113,18 +113,6 @@ class OrderCommitView(View):
         # 生成订单编号：年月日时分秒+用户编号
         order_id = timezone.localtime().strftime('%Y%m%d%H%M%S') + ('%09d' % user.id)
         # 保存订单基本信息 OrderInfo（一）
-        order = OrderInfo.objects.create(
-            order_id=order_id,
-            user=user,
-            address=address,
-            total_count=0,
-            total_amount=Decimal('0'),
-            freight=Decimal('10.00'),
-            pay_method=pay_method,
-            status=OrderInfo.ORDER_STATUS_ENUM['UNPAID']
-            if pay_method == OrderInfo.PAY_METHODS_ENUM['ALIPAY']
-            else OrderInfo.ORDER_STATUS_ENUM['UNSEND']
-        )
 
 
         # 显式的开启一个事务
@@ -141,8 +129,7 @@ class OrderCommitView(View):
                 total_amount=Decimal('0'),
                 freight=Decimal('10.00'),
                 pay_method=pay_method,
-                status=OrderInfo.ORDER_STATUS_ENUM['UNPAID'] if pay_method == OrderInfo.PAY_METHODS_ENUM['ALIPAY'] else
-                OrderInfo.ORDER_STATUS_ENUM['UNSEND']
+                status=OrderInfo.ORDER_STATUS_ENUM['UNPAID'] if pay_method == OrderInfo.PAY_METHODS_ENUM['ALIPAY'] else OrderInfo.ORDER_STATUS_ENUM['UNSEND']
             )
 
             # 从redis读取购物车中被勾选的商品信息
