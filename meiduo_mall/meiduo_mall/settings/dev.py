@@ -142,7 +142,7 @@ DATABASES = {
     },
 
 }
-
+DATABASE_ROUTERS = ['meiduo_mall.utils.db_router.MasterSlaveDBRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
