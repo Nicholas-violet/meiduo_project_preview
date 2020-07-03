@@ -132,6 +132,15 @@ DATABASES = {
         'PASSWORD': 'mysql', # 数据库用户密码
         'NAME': 'meiduo_mall_priview' # 数据库名字
     },
+    'slave': {
+        'ENGINE': 'django.db.backends.mysql', # 数据库引擎
+        'HOST': '127.0.0.1', # 数据库主机
+        'PORT': 8306, # 数据库端口
+        'USER': 'root', # 数据库用户名
+        'PASSWORD': '123456', # 数据库用户密码
+        'NAME': 'meiduo_mall_priview' # 数据库名字
+    },
+
 }
 
 
